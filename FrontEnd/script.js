@@ -100,7 +100,7 @@ const gallery = document.querySelector(".gallery");
 btnLogin.addEventListener("click", function(){
       const pageConnexion= document.querySelector('main');
       pageConnexion.innerHTML= '';
-      const htmlConnexion= '<div id="main-login"><h2>Log in</h2><form id="form-login"><div class="inputContainer"><label for="email">Email</label><input id="email" type="text"></div><div class="inputContainer"><label for="motDePasse">Mot de passe</label><input id="motDePasse" type="text"></div><button type="submit" id="btnForm">Se connecter</button></form><a href="#">Mot de passe oublié</a></div>';
+      const htmlConnexion= '<div id="main-login"><h2>Log in</h2><form id="form-login"><div class="erreurMessage"></div><div class="inputContainer"><label for="email">Email</label><input id="email" type="text"></div><div class="inputContainer"><label for="motDePasse">Mot de passe</label><input id="motDePasse" type="text"></div><button type="submit" id="btnForm">Se connecter</button></form><a href="#">Mot de passe oublié</a></div>';
       pageConnexion.innerHTML= htmlConnexion;
       
       const footer = document.querySelector("footer");
@@ -200,9 +200,15 @@ btnLogin.addEventListener("click", function(){
               fetch(url, requestOptions)
                 .then(response => {
                   // Gestion de la réponse HTTP
-                  if (!response.ok) {
-                    throw new Error('Erreur HTTP : ' + response.status);
-                  }
+                  
+                    if (response.status === 404) {
+                      throw new Error('Les données demandées n\'ont pas été trouvées.');
+                    } else if (response.status === 401) {
+                      throw new Error('Vous n\'êtes pas autorisé à accéder à ces données.');
+                    } else {
+                      throw new Error('Erreur de récupération des données : ' + response.status);
+                    }
+                  
                   // Récupérer et renvoyer les données JSON de la réponse
                   return response.json();
                 })
@@ -217,7 +223,9 @@ btnLogin.addEventListener("click", function(){
                   window.location.reload();
                 })
                 .catch(error => {
-                  
+                  const ErreurMessageTexte = "<p>Erreur dans l'identifiant ou le mot de passe</p>";
+                  const ErreurMessage = document.querySelector(".erreurMessage")
+                  ErreurMessage.innerHTML = ErreurMessageTexte;
                   // Gestion des erreurs
                   console.error('Erreur lors de la requête :', error);
                 });
