@@ -99,10 +99,78 @@ const gallery = document.querySelector(".gallery");
 
 const btnLogin = document.getElementById("login")
 btnLogin.addEventListener("click", function(){
-  pageConnexion= document.querySelector('main');
+  const pageConnexion= document.querySelector('main');
   pageConnexion.innerHTML= '';
-  const htmlConnexion= ' <h1>Log in<h1><form><input id="email" type="text"><label for="email">Email</label><input id="motDePasse" type="text"><label for="motDePasse">mot de passe</label><button type="submit">Se connecter</button></form>';
+  const htmlConnexion= '<div id="main-login"><h2>Log in</h2><form id="form-login"><div class="inputContainer"><label for="email">Email</label><input id="email" type="text"></div><div class="inputContainer"><label for="motDePasse">Mot de passe</label><input id="motDePasse" type="text"></div><button type="submit" id="btnForm">Se connecter</button></form><a href="#">Mot de passe oublié</a></div>';
   pageConnexion.innerHTML= htmlConnexion;
+  
+  const footer = document.querySelector("footer");
+  if (footer){
+    footer.style.position = "absolute";
+    footer.style.top = "964px";
+    footer.style.width = "1140px";
+  }
+   
+  const mainLogin = document.getElementById("main-login");
+  if (mainLogin){
+    mainLogin.style.display = "flex";
+    mainLogin.style.flexDirection = "column";
+    mainLogin.style.alignItems = "center";
+    mainLogin.style.position = "absolute";
+    mainLogin.style.top = "242px";
+    mainLogin.style.justifyContent = "center";
+    mainLogin.style.width = "1140px";
+  };
+
+  const formLogin =document.getElementById("form-login");
+  if (formLogin) {
+    formLogin.style.display = "flex";
+    formLogin.style.flexDirection = "column";
+    formLogin.style.alignItems = "center";
+    formLogin.style.marginTop = "37px";
+  }
+
+  const inputContainers= document.querySelectorAll(".inputContainer");
+  if (inputContainers) {for (let i = 0; i < inputContainers.length; i++){
+    const inputContainer = inputContainers[i];
+    inputContainer.style.display = "flex";
+    inputContainer.style.flexDirection = "column";
+    inputContainer.style.textAlign = "left";
+  }
+  }
+
+  const inputEmail = document.getElementById("email");
+  if (inputEmail){
+    inputEmail.style.width = "379px";
+    inputEmail.style.boxSizing = "border-box";
+    inputEmail.style.marginTop = "6px";
+    inputEmail.style.marginBottom = "30px";
+  }
+  
+  const inputMotDePasse = document.getElementById("motDePasse");
+  if (inputMotDePasse){
+    inputMotDePasse.style.width = "379px";
+    inputMotDePasse.style.boxSizing = "border-box";
+    inputMotDePasse.style.marginTop = "6px";
+  }
+
+  const btnForm = document.getElementById("btnForm");
+  if (btnForm){
+    btnForm.style.width = "179px";
+    btnForm.style.marginTop = "37px";
+    btnForm.style.height = "36px"
+    btnForm.style.borderRadius = "60px";
+    btnForm.style.backgroundColor = "#1D6154";
+    btnForm.style.border = "none";
+    
+    
+  }
+  
+
+
+  
+
+
 })
 
 
