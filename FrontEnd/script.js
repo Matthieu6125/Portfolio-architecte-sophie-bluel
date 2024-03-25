@@ -93,150 +93,135 @@ const gallery = document.querySelector(".gallery");
     console.log(contenuFiltre);
     console.log("hello");
       genererContenu(contenuFiltre);
-      
   }
 
 
-const btnLogin = document.getElementById("login")
+  const btnLogin = document.getElementById("login")
 btnLogin.addEventListener("click", function(){
-  const pageConnexion= document.querySelector('main');
-  pageConnexion.innerHTML= '';
-  const htmlConnexion= '<div id="main-login"><h2>Log in</h2><form id="form-login"><div class="inputContainer"><label for="email">Email</label><input id="email" type="text"></div><div class="inputContainer"><label for="motDePasse">Mot de passe</label><input id="motDePasse" type="text"></div><button type="submit" id="btnForm">Se connecter</button></form><a href="#">Mot de passe oublié</a></div>';
-  pageConnexion.innerHTML= htmlConnexion;
-  
-  const footer = document.querySelector("footer");
-  if (footer){
-    footer.style.position = "absolute";
-    footer.style.top = "964px";
-    footer.style.width = "1140px";
-  }
-   
-  const mainLogin = document.getElementById("main-login");
-  if (mainLogin){
-    mainLogin.style.display = "flex";
-    mainLogin.style.flexDirection = "column";
-    mainLogin.style.alignItems = "center";
-    mainLogin.style.position = "absolute";
-    mainLogin.style.top = "242px";
-    mainLogin.style.justifyContent = "center";
-    mainLogin.style.width = "1140px";
-  };
+      const pageConnexion= document.querySelector('main');
+      pageConnexion.innerHTML= '';
+      const htmlConnexion= '<div id="main-login"><h2>Log in</h2><form id="form-login"><div class="inputContainer"><label for="email">Email</label><input id="email" type="text"></div><div class="inputContainer"><label for="motDePasse">Mot de passe</label><input id="motDePasse" type="text"></div><button type="submit" id="btnForm">Se connecter</button></form><a href="#">Mot de passe oublié</a></div>';
+      pageConnexion.innerHTML= htmlConnexion;
+      
+      const footer = document.querySelector("footer");
+      if (footer){
+        footer.style.position = "absolute";
+        footer.style.top = "964px";
+        footer.style.width = "1140px";
+      }
+      
+      const mainLogin = document.getElementById("main-login");
+      if (mainLogin){
+        mainLogin.style.display = "flex";
+        mainLogin.style.flexDirection = "column";
+        mainLogin.style.alignItems = "center";
+        mainLogin.style.position = "absolute";
+        mainLogin.style.top = "242px";
+        mainLogin.style.justifyContent = "center";
+        mainLogin.style.width = "1140px";
+      };
 
-  const formLogin =document.getElementById("form-login");
-  if (formLogin) {
-    formLogin.style.display = "flex";
-    formLogin.style.flexDirection = "column";
-    formLogin.style.alignItems = "center";
-    formLogin.style.marginTop = "37px";
-  }
+      const formLogin =document.getElementById("form-login");
+      if (formLogin) {
+        formLogin.style.display = "flex";
+        formLogin.style.flexDirection = "column";
+        formLogin.style.alignItems = "center";
+        formLogin.style.marginTop = "37px";
+      }
 
-  const inputContainers= document.querySelectorAll(".inputContainer");
-  if (inputContainers) {for (let i = 0; i < inputContainers.length; i++){
-    const inputContainer = inputContainers[i];
-    inputContainer.style.display = "flex";
-    inputContainer.style.flexDirection = "column";
-    inputContainer.style.textAlign = "left";
-  }
-  }
+      const inputContainers= document.querySelectorAll(".inputContainer");
+      if (inputContainers) {for (let i = 0; i < inputContainers.length; i++){
+        const inputContainer = inputContainers[i];
+        inputContainer.style.display = "flex";
+        inputContainer.style.flexDirection = "column";
+        inputContainer.style.textAlign = "left";
+      }
+      }
 
-  const inputEmail = document.getElementById("email");
-  if (inputEmail){
-    inputEmail.style.width = "379px";
-    inputEmail.style.boxSizing = "border-box";
-    inputEmail.style.marginTop = "6px";
-    inputEmail.style.marginBottom = "30px";
-  }
-  
-  const inputMotDePasse = document.getElementById("motDePasse");
-  if (inputMotDePasse){
-    inputMotDePasse.style.width = "379px";
-    inputMotDePasse.style.boxSizing = "border-box";
-    inputMotDePasse.style.marginTop = "6px";
-  }
+      const inputEmail = document.getElementById("email");
+      if (inputEmail){
+        inputEmail.style.width = "379px";
+        inputEmail.style.boxSizing = "border-box";
+        inputEmail.style.marginTop = "6px";
+        inputEmail.style.marginBottom = "30px";
+      }
+      
+      const inputMotDePasse = document.getElementById("motDePasse");
+      if (inputMotDePasse){
+        inputMotDePasse.style.width = "379px";
+        inputMotDePasse.style.boxSizing = "border-box";
+        inputMotDePasse.style.marginTop = "6px";
+      }
 
-  const btnForm = document.getElementById("btnForm");
-  if (btnForm){
-    btnForm.style.width = "179px";
-    btnForm.style.marginTop = "37px";
-    btnForm.style.height = "36px"
-    btnForm.style.borderRadius = "60px";
-    btnForm.style.backgroundColor = "#1D6154";
-    btnForm.style.border = "none";
-    
-    
-  }
-  
+      const btnForm = document.getElementById("btnForm");
+      if (btnForm){
+        btnForm.style.width = "179px";
+        btnForm.style.marginTop = "37px";
+        btnForm.style.height = "36px"
+        btnForm.style.borderRadius = "60px";
+        btnForm.style.backgroundColor = "#1D6154";
+        btnForm.style.border = "none";
+      }
 
+      btnForm.addEventListener("click", function (event){
+        event.preventDefault();
+        console.log("hello");
+        const emailInput = document.getElementById("email");
+        const emailValue = emailInput.value;
+        console.log("La valeur de l'adresse e-mail est : " + emailValue);
 
-  
+        const MdPInput= document.getElementById("motDePasse");
 
+        // Pour récupérer la valeur de l'input text
+        const mdpValue = MdPInput.value;
+        // Utilisez ensuite la variable emailValue comme bon vous semble
+        console.log("La valeur du mot de passe est : " + mdpValue);
 
+        if (emailValue !== null && mdpValue !== null){
+                        // URL de destination
+              const url = 'http://localhost:5678/api/users/login';
+
+              // Données à envoyer dans le corps de la requête (sous forme de chaîne JSON)
+              const data = {
+                email: emailValue,
+                password: mdpValue
+              };
+
+              // Configuration de la requête
+              const requestOptions = {
+                method: 'POST', // Méthode POST
+                headers: {
+                  'Content-Type': 'application/json' // Type de contenu : JSON
+                },
+                body: JSON.stringify(data) // Corps de la requête : données converties en JSON
+              };
+
+              // Envoi de la requête
+              fetch(url, requestOptions)
+                .then(response => {
+                  // Gestion de la réponse HTTP
+                  if (!response.ok) {
+                    throw new Error('Erreur HTTP : ' + response.status);
+                  }
+                  // Récupérer et renvoyer les données JSON de la réponse
+                  return response.json();
+                })
+                .then(data => {
+                  const ident= data;
+                  const token = ident.token;
+                  console.log("le token est : " + token);
+                  sessionStorage.setItem('token', token);
+                  const tokenFromSessionStorage = sessionStorage.getItem('token');
+                  console.log("La valeur de 'token' dans sessionStorage est : " + tokenFromSessionStorage);
+                  // Utilisation des données de réponse
+                  window.location.reload();
+                })
+                .catch(error => {
+                  
+                  // Gestion des erreurs
+                  console.error('Erreur lors de la requête :', error);
+                });
+        }
+      })
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const postData = {
-  // Données à envoyer dans la requête POST
-  // Par exemple :
-  email: "sophie.bluel@test.tld",
-  password: "S0phie"
-};
-
-fetch('http://localhost:5678/api/users/login', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-    // Autres en-têtes si nécessaire
-  },
-  body: JSON.stringify(postData) // Convertit les données en JSON
-})
-.then(response => {
-  if (response.status === 200) {
-    // Statut 200 : Succès
-    console.log('La requête a réussi.');
-    return response.json(); // Traite les données de réponse JSON
-  } else if (response.status === 401) {
-    // Statut 401 : Non autorisé
-    console.error('Non autorisé - Vérifiez vos informations d\'identification.');
-    // Tu peux gérer d'autres erreurs ici si nécessaire
-  } else if (response.status === 404) {
-    // Statut 404 : Non trouvé
-    console.error('La ressource demandée est introuvable.');
-    // Tu peux gérer d'autres erreurs ici si nécessaire
-  } else {
-    // Autres statuts d'erreur
-    console.error('Erreur inattendue:', response.status);
-  }
-})
-.then(data => {
-  // Si la réponse contient des données JSON, les traiter ici
-  if (data) {
-    console.log('Données de réponse:', data);
-  }
-})
-.catch(error => {
-  console.error('Erreur lors de la requête:', error);
-});
