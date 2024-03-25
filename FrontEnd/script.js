@@ -1,3 +1,26 @@
+const presenceToken = sessionStorage.getItem('token');
+if (presenceToken !== null){
+  const barreEdition = document.createElement("div");
+  const textEdition = document.createElement("p");
+  textEdition.textContent = "Mode édition";
+  const iconElement = document.createElement("i");
+  iconElement.style.color = "#fff"
+  iconElement.classList.add("far", "fa-pen-to-square");
+  barreEdition.appendChild(iconElement);
+  barreEdition.appendChild(textEdition);
+  // Appliquer les styles à la barre d'édition
+  barreEdition.style.display = "flex";
+  barreEdition.style.justifyContent = "center";
+  barreEdition.style.alignItems = "center";
+  barreEdition.style.backgroundColor = "black";
+  barreEdition.style.width = "100%";
+  barreEdition.style.height = "59px";
+  textEdition.style.color = "#fff";
+  const headerElement = document.querySelector("header");
+  document.body.insertBefore(barreEdition, headerElement);
+}
+
+
 const btnTous = document.createElement("button");
 btnTous.innerText = "tous";
 const btnObjects = document.createElement("button");
@@ -205,12 +228,14 @@ btnLogin.addEventListener("click", function(){
                       throw new Error('Les données demandées n\'ont pas été trouvées.');
                     } else if (response.status === 401) {
                       throw new Error('Vous n\'êtes pas autorisé à accéder à ces données.');
+                    } else if (response.status === 200){
+                      return response.json();
                     } else {
                       throw new Error('Erreur de récupération des données : ' + response.status);
                     }
                   
                   // Récupérer et renvoyer les données JSON de la réponse
-                  return response.json();
+                  
                 })
                 .then(data => {
                   const ident= data;
