@@ -1,385 +1,396 @@
-const presenceToken = sessionStorage.getItem('token');
-console.log("le token de session est:" + presenceToken);
+const Token = sessionStorage.getItem('token');
 const userId = sessionStorage.getItem('userId');
-console.log("l'id dans le session storage est " + userId);
-if (presenceToken !== null) {
+
+if (Token !== null) {
+
   // barre du haut avec la mention mode édition
-  const barreEdition = document.createElement("div");
-  const textEdition = document.createElement("p");
-  textEdition.textContent = "Mode édition";
+  const editModeBar = document.createElement("div");
+  const editModeTextBar = document.createElement("p");
+  editModeTextBar.textContent = "Mode édition";
   const iconElement = document.createElement("i");
   iconElement.style.color = "#fff";
   iconElement.classList.add("far", "fa-pen-to-square");
-  barreEdition.appendChild(iconElement);
-  barreEdition.appendChild(textEdition);
+  editModeBar.appendChild(iconElement);
+  editModeBar.appendChild(editModeTextBar);
+
   // Appliquer les styles à la barre d'édition
-  barreEdition.style.display = "flex";
-  barreEdition.style.justifyContent = "center";
-  barreEdition.style.alignItems = "center";
-  barreEdition.style.backgroundColor = "black";
-  barreEdition.style.width = "100%";
-  barreEdition.style.height = "59px";
-  textEdition.style.color = "#fff";
+  editModeBar.style.display = "flex";
+  editModeBar.style.justifyContent = "center";
+  editModeBar.style.alignItems = "center";
+  editModeBar.style.backgroundColor = "black";
+  editModeBar.style.width = "100%";
+  editModeBar.style.height = "59px";
+  editModeTextBar.style.color = "#fff";
   const headerElement = document.querySelector("header");
-  document.body.insertBefore(barreEdition, headerElement);
+  document.body.insertBefore(editModeBar, headerElement);
 
   // Changement boutton login en logout
-  const btnlogout = document.getElementById("login");
+  const btnlogout = Array.from(document.querySelectorAll('li')).find(li => {
+    const text = li.textContent.trim();
+    return text === "login" || text === "logout";
+  });
   btnlogout.textContent = "logout";
   btnlogout.addEventListener("click", function () {
-    console.log("je veux me déconnecter");
     sessionStorage.removeItem('token');
-    const presenceToken = sessionStorage.getItem('token');
-    console.log("le token de session est:" + presenceToken);
     location.reload();
-  })
+  });
 
   // boutoun modifier pour modale
-  const btnModifier = document.createElement("button");
-  btnModifier.classList.add("btnModifierModale");
-  btnModifier.setAttribute("type", "button");
-  btnModifier.style.marginLeft = "30px";
-  btnModifier.style.border = "none";
-  btnModifier.style.background = "none";
-  const iconModifier = document.createElement("i");
-  iconModifier.style.color = "black";
-  iconModifier.style.marginRight = "10px"
-  iconModifier.classList.add("far", "fa-pen-to-square");
-  btnModifier.textContent = "Modifier";
-  const divTitreModifier = document.querySelector('#portfolio h2');
-  btnModifier.insertBefore(iconModifier, btnModifier.firstChild);
-  divTitreModifier.appendChild(btnModifier);
+  const editButton = document.createElement("button");
+  editButton.classList.add("editModalButton");
+  editButton.setAttribute("type", "button");
+  editButton.style.marginLeft = "30px";
+  editButton.style.border = "none";
+  editButton.style.background = "none";
+  const editIcon = document.createElement("i");
+  editIcon.style.color = "black";
+  editIcon.style.marginRight = "10px"
+  editIcon.classList.add("far", "fa-pen-to-square");
+  editButton.textContent = "Modifier";
+  editButton.insertBefore(editIcon, editButton.firstChild);
+  const titleEditDiv = document.querySelector('#portfolio h2');  
+  titleEditDiv.appendChild(editButton);
 
   // gestion de la modale
-  btnModifierModale = document.querySelector(".btnModifierModale");
-  btnModifierModale.addEventListener("click", function () {
-    console.log(" je veux modifier ma gallerie");
+  const editModalButton = document.querySelector(".editModalButton");
+  editModalButton.addEventListener("click", function () {
     openModales();
   })
 }
+
 function openModales(){
-  // Création de la modale
+  // Création de la modale galerie
 
-    //Création arrrière plan
-    const ArrierePlanModale = document.createElement("aside");
-    ArrierePlanModale.style.position = "fixed";
-    ArrierePlanModale.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
-    ArrierePlanModale.style.width = "100%";
-    ArrierePlanModale.style.height = "100%";
-    ArrierePlanModale.style.top = "0px";
-    ArrierePlanModale.style.left = "0px";
-    ArrierePlanModale.style.display = "flex"
-    ArrierePlanModale.style.alignItems = "center";
-    ArrierePlanModale.style.justifyContent = "center";
+    //Création arrrière plan galerie
+    const modalBackground = document.createElement("aside");
+    modalBackground.style.position = "fixed";
+    modalBackground.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+    modalBackground.style.width = "100%";
+    modalBackground.style.height = "100%";
+    modalBackground.style.top = "0px";
+    modalBackground.style.left = "0px";
+    modalBackground.style.display = "flex"
+    modalBackground.style.alignItems = "center";
+    modalBackground.style.justifyContent = "center";
 
-    // Création de la modale
-    const modale = document.createElement("div");
-    modale.style.width = "630px";
-    modale.style.height = "688px";
-    modale.style.backgroundColor = "#FFFFFF";
-    modale.style.display = "flex"
-    modale.style.flexDirection = "column";
-    modale.style.alignItems = "center";
-    modale.style.position = "fixed";
-
-
-    // Elément de la modale
-    // titre modale
-    const titreModale = document.createElement("h3");
-    titreModale.style.fontSize = "26px";
-    titreModale.style.fontWeight = "400";
-    titreModale.textContent = "Galerie photo";
-    titreModale.style.position = "absolute";
-    titreModale.style.top = "60px";
-    // container modale
-    const containerImgModale = document.createElement("div");
-    containerImgModale.classList.add("containerImgModale");
-    containerImgModale.style.display = "grid";
-    containerImgModale.style.rowGap = "30px"
-    containerImgModale.style.gridTemplateColumns = "1fr 1fr 1fr 1fr 1fr";
-    containerImgModale.style.gridAutoRows = "102px";
-    containerImgModale.style.borderBottom = "1px solid black";
-    containerImgModale.style.width = "420px";
-    containerImgModale.style.height = "430px";
-    containerImgModale.style.position = "absolute";
-    containerImgModale.style.top = "126px";
-    // bouton d'ajout de projet
-    const btnAjoutPhoto = document.createElement("button");
-    btnAjoutPhoto.textContent = "Ajouter une photo";
-    btnAjoutPhoto.style.width = "237px";
-    btnAjoutPhoto.style.height = "36px";
-    btnAjoutPhoto.style.backgroundColor = "#1D6154";
-    btnAjoutPhoto.style.color = "#FFFFFF";
-    btnAjoutPhoto.style.borderRadius = "60px";
-    btnAjoutPhoto.style.position = "absolute";
-    btnAjoutPhoto.style.top = "607px";
-    btnAjoutPhoto.style.border = "none";
+    // Création de la modale galerie
+    const modalGalery = document.createElement("div");
+    modalGalery.style.width = "630px";
+    modalGalery.style.height = "688px";
+    modalGalery.style.backgroundColor = "#FFFFFF";
+    modalGalery.style.display = "flex"
+    modalGalery.style.flexDirection = "column";
+    modalGalery.style.alignItems = "center";
+    modalGalery.style.position = "fixed";
 
 
-    const btnFermeture = document.createElement("button");
-    btnFermeture.style.display = "flex";
-    btnFermeture.style.position = "absolute";
-    btnFermeture.style.left = "580px";
-    btnFermeture.style.top = "26px";
-    btnFermeture.style.border = "none";
-    btnFermeture.style.background = "none";
-    const iconFermeture = document.createElement("i");
-    iconFermeture.classList.add("fas", "fa-xmark");
-    iconFermeture.style.fontSize = "24px";
+    // Elément de la modale galerie
 
-    btnFermeture.appendChild(iconFermeture);
+    // titre modale galerie
+    const modalTitle = document.createElement("h3");
+    modalTitle.style.fontSize = "26px";
+    modalTitle.style.fontWeight = "400";
+    modalTitle.textContent = "Galerie photo";
+    modalTitle.style.position = "absolute";
+    modalTitle.style.top = "60px";
 
-    // Contenu de la modale
-    fetchData()
-      .then(data => {
-        // Les données sont disponibles ici en dehors de la fonction fetch
-        console.log("Données récupérées :", data);
-        // Vous pouvez appeler d'autres fonctions avec les données ici
-        // autreFonction(data);
-        genererContennuModale(data);
+    // container modale galerie
+    const modalImageContainer = document.createElement("div");
+    modalImageContainer.classList.add("containerImgModale");
+    modalImageContainer.style.display = "grid";
+    modalImageContainer.style.rowGap = "30px"
+    modalImageContainer.style.gridTemplateColumns = "1fr 1fr 1fr 1fr 1fr";
+    modalImageContainer.style.gridAutoRows = "102px";
+    modalImageContainer.style.borderBottom = "1px solid black";
+    modalImageContainer.style.width = "420px";
+    modalImageContainer.style.height = "430px";
+    modalImageContainer.style.position = "absolute";
+    modalImageContainer.style.top = "126px";
 
-      });
-    modale.appendChild(btnFermeture);
-    ArrierePlanModale.appendChild(modale);
-    modale.appendChild(titreModale);
-    modale.appendChild(containerImgModale);
-    modale.appendChild(btnAjoutPhoto);
-    document.body.appendChild(ArrierePlanModale);
-    btnFermeture.addEventListener("click", function () {
-      const fermeture = document.querySelector("aside");
-      fermeture.remove();
+    // bouton d'ajout de projet 
+    const addPhotoButton = document.createElement("button");
+    addPhotoButton.textContent = "Ajouter une photo";
+    addPhotoButton.style.width = "237px";
+    addPhotoButton.style.height = "36px";
+    addPhotoButton.style.backgroundColor = "#1D6154";
+    addPhotoButton.style.color = "#FFFFFF";
+    addPhotoButton.style.borderRadius = "60px";
+    addPhotoButton.style.position = "absolute";
+    addPhotoButton.style.top = "607px";
+    addPhotoButton.style.border = "none";
+
+    //bouton de fermeture de la modale galerie
+    const closeButtonModalGallery = document.createElement("button");
+    closeButtonModalGallery.style.display = "flex";
+    closeButtonModalGallery.style.position = "absolute";
+    closeButtonModalGallery.style.left = "580px";
+    closeButtonModalGallery.style.top = "26px";
+    closeButtonModalGallery.style.border = "none";
+    closeButtonModalGallery.style.background = "none";
+    const closeIcon = document.createElement("i");
+    closeIcon.classList.add("fas", "fa-xmark");
+    closeIcon.style.fontSize = "24px";
+
+    closeButtonModalGallery.appendChild(closeIcon);    
+    modalGalery.appendChild(closeButtonModalGallery);
+    modalBackground.appendChild(modalGalery);
+    modalGalery.appendChild(modalTitle);
+    modalGalery.appendChild(modalImageContainer);
+    modalGalery.appendChild(addPhotoButton);
+    document.body.appendChild(modalBackground);
+
+    closeButtonModalGallery.addEventListener("click", function () {
+      const close = document.querySelector("aside");
+      close.remove();
     });
 
-
-
-    btnAjoutPhoto.addEventListener("click", function () {
-      const fermeture = document.querySelector("aside");
-      fermeture.remove();      
+    addPhotoButton.addEventListener("click", function () {
+      const close = document.querySelector("aside");
+      close.remove();      
       genererModaleAjout();
     })
+
+    genererContennuModale(contenu);
   
 }
 function genererModaleAjout() {
   //Création arrrière plan
-  const ArrierePlanModaleAjout = document.createElement("aside");
-  ArrierePlanModaleAjout.style.position = "fixed";
-  ArrierePlanModaleAjout.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
-  ArrierePlanModaleAjout.style.width = "100%";
-  ArrierePlanModaleAjout.style.height = "100%";
-  ArrierePlanModaleAjout.style.top = "0px";
-  ArrierePlanModaleAjout.style.left = "0px";
-  ArrierePlanModaleAjout.style.display = "flex"
-  ArrierePlanModaleAjout.style.alignItems = "center";
-  ArrierePlanModaleAjout.style.justifyContent = "center";
+  const addModalBackground = document.createElement("aside");
+  addModalBackground.style.position = "fixed";
+  addModalBackground.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+  addModalBackground.style.width = "100%";
+  addModalBackground.style.height = "100%";
+  addModalBackground.style.top = "0px";
+  addModalBackground.style.left = "0px";
+  addModalBackground.style.display = "flex"
+  addModalBackground.style.alignItems = "center";
+  addModalBackground.style.justifyContent = "center";
 
   // Création de la modale
-  const modaleAjout = document.createElement("div");
-  modaleAjout.style.width = "630px";
-  modaleAjout.style.height = "670px";
-  modaleAjout.style.backgroundColor = "#FFFFFF";
-  modaleAjout.style.display = "flex"
-  modaleAjout.style.flexDirection = "column";
-  modaleAjout.style.alignItems = "center";
-  modaleAjout.style.position = "fixed";
-  document.body.appendChild(ArrierePlanModaleAjout);
-  ArrierePlanModaleAjout.appendChild(modaleAjout);
+  const addModal = document.createElement("div");
+  addModal.style.width = "630px";
+  addModal.style.height = "670px";
+  addModal.style.backgroundColor = "#FFFFFF";
+  addModal.style.display = "flex"
+  addModal.style.flexDirection = "column";
+  addModal.style.alignItems = "center";
+  addModal.style.position = "fixed";
+  document.body.appendChild(addModalBackground);
+  addModalBackground.appendChild(addModal);
 
-  const btnFermetureModaleAjout = document.createElement("button");
-  btnFermetureModaleAjout.style.background = "none";
-  btnFermetureModaleAjout.style.border = "none";
-  btnFermetureModaleAjout.style.position = "absolute";
-  btnFermetureModaleAjout.style.top = "26px";
-  btnFermetureModaleAjout.style.left = "580px";
+  const closeAddModalButton = document.createElement("button");
+  closeAddModalButton.style.background = "none";
+  closeAddModalButton.style.border = "none";
+  closeAddModalButton.style.position = "absolute";
+  closeAddModalButton.style.top = "26px";
+  closeAddModalButton.style.left = "580px";
   const iconFermetureModaleAjout = document.createElement("i");
   iconFermetureModaleAjout.classList.add("fas", "fa-xmark");
   iconFermetureModaleAjout.style.fontSize = "24px";
-  btnFermetureModaleAjout.appendChild(iconFermetureModaleAjout);
-  modaleAjout.appendChild(btnFermetureModaleAjout);
+  closeAddModalButton.appendChild(iconFermetureModaleAjout);
+  addModal.appendChild(closeAddModalButton);
 
-  const titreModaleAjout = document.createElement("h3");
-  titreModaleAjout.textContent = "Ajout photo";
-  titreModaleAjout.style.fontSize = "26px"; 
-  titreModaleAjout.style.fontWeight = "400";
-  titreModaleAjout.style.position = "absolute";
-  titreModaleAjout.style.top = "60px";
-  modaleAjout.appendChild(titreModaleAjout);
+  const titleAddModal = document.createElement("h3");
+  titleAddModal.textContent = "Ajout photo";
+  titleAddModal.style.fontSize = "26px"; 
+  titleAddModal.style.fontWeight = "400";
+  titleAddModal.style.position = "absolute";
+  titleAddModal.style.top = "60px";
+  addModal.appendChild(titleAddModal);
 
-  const formModalAjout = document.createElement("form");
-  formModalAjout.style.display = "flex";
-  formModalAjout.style.flexDirection = "column";
-  formModalAjout.style.alignItems = "flex-start";
-  formModalAjout.style.width = "420px";
-  formModalAjout.style.position = "relative";
-  modaleAjout.appendChild(formModalAjout);
+  const addModalForm = document.createElement("form");
+  addModalForm.style.display = "flex";
+  addModalForm.style.flexDirection = "column";
+  addModalForm.style.alignItems = "flex-start";
+  addModalForm.style.width = "420px";
+  addModalForm.style.position = "relative";
+  addModal.appendChild(addModalForm);
 
-  const inputPhoto = document.createElement("input");
-  inputPhoto.id = "inputPhoto";
-  inputPhoto.setAttribute("type", "file");
-  inputPhoto.style.display = "none";
-  const labelInputPhoto = document.createElement("label");
-  labelInputPhoto.setAttribute("for", "inputPhoto"); // Utilisez setAttribute pour définir l'attribut "for"
+  const photoInput = document.createElement("input");
+  photoInput.id = "inputPhoto";
+  photoInput.setAttribute("type", "file");
+  photoInput.style.display = "none";
+  addModalForm.appendChild(photoInput);
 
-  labelInputPhoto.style.display = "flex";
-  labelInputPhoto.style.flexDirection = "column";
-  labelInputPhoto.style.alignItems = "center";
-  labelInputPhoto.style.position = "absolute";
-  labelInputPhoto.style.top = "221px";
-  labelInputPhoto.style.left = "0";
-  labelInputPhoto.style.right = "0";
-  labelInputPhoto.style.marginLeft = "auto";
-  labelInputPhoto.style.marginRight = "auto";
-  labelInputPhoto.style.zIndex = "1";
-  const iconInputPhoto = document.createElement("i");
-  iconInputPhoto.classList.add("far", "fa-image");
-  iconInputPhoto.style.fontSize = "76px";
-  iconInputPhoto.style.position = "absolute";    
-  iconInputPhoto.style.top = "139px";
-  iconInputPhoto.style.zIndex = "1";
-  iconInputPhoto.style.color = "#B9C5CC";
-  modaleAjout.appendChild(iconInputPhoto);
-  const btnInputPhoto = document.createElement("p");
-  btnInputPhoto.innerText = "+ Ajouter Photo";
-  btnInputPhoto.style.display = "flex";
-  btnInputPhoto.style.alignItems = "center";
-  btnInputPhoto.style.justifyContent = "center";
-  btnInputPhoto.style.backgroundColor = "#B9C5CC";
-  btnInputPhoto.style.borderRadius = "50px";
-  btnInputPhoto.style.width = "173px";
-  btnInputPhoto.style.height = "36px";
-  btnInputPhoto.style.zIndex = "1";
-  btnInputPhoto.style.border = "none";
+  const photoInpuLabel = document.createElement("label");
+  photoInpuLabel.setAttribute("for", "inputPhoto"); 
+  photoInpuLabel.style.display = "flex";
+  photoInpuLabel.style.flexDirection = "column";
+  photoInpuLabel.style.alignItems = "center";
+  photoInpuLabel.style.position = "absolute";
+  photoInpuLabel.style.top = "221px";
+  photoInpuLabel.style.left = "0";
+  photoInpuLabel.style.right = "0";
+  photoInpuLabel.style.marginLeft = "auto";
+  photoInpuLabel.style.marginRight = "auto";
+  photoInpuLabel.style.zIndex = "1";
+  addModalForm.appendChild(photoInpuLabel);
 
-  labelInputPhoto.appendChild(btnInputPhoto);
-  const infoPhoto = document.createElement("p");
-  infoPhoto.innerText = "jpg, png : 4mo max";
-  infoPhoto.style.zIndex = "1";
-  infoPhoto.style.position = "absolute";
-  infoPhoto.style.top = "264px";
-  modaleAjout.appendChild(infoPhoto);
+  const photoInputIcon = document.createElement("i");
+  photoInputIcon.classList.add("far", "fa-image");
+  photoInputIcon.style.fontSize = "76px";
+  photoInputIcon.style.position = "absolute";    
+  photoInputIcon.style.top = "139px";
+  photoInputIcon.style.zIndex = "1";
+  photoInputIcon.style.color = "#B9C5CC";
+  addModal.appendChild(photoInputIcon);
+  
+  const photoInputButton = document.createElement("p");
+  photoInputButton.innerText = "+ Ajouter Photo";
+  photoInputButton.style.display = "flex";
+  photoInputButton.style.alignItems = "center";
+  photoInputButton.style.justifyContent = "center";
+  photoInputButton.style.backgroundColor = "#B9C5CC";
+  photoInputButton.style.borderRadius = "50px";
+  photoInputButton.style.width = "173px";
+  photoInputButton.style.height = "36px";
+  photoInputButton.style.zIndex = "1";
+  photoInputButton.style.border = "none";
+  photoInpuLabel.appendChild(photoInputButton);  
 
-  const divInputPhoto = document.createElement("div");
-  divInputPhoto.style.height = "169px";
-  divInputPhoto.style.width = "420px";
-  divInputPhoto.style.display = "flex";
-  divInputPhoto.style.justifyContent = "center";
-  divInputPhoto.style.position = "absolute";
-  divInputPhoto.style.top = "126px";
-  divInputPhoto.style.backgroundColor = "#E8F1F6";
-  divInputPhoto.style.zIndex = "0";
-  /* divInputPhoto.style.position = "relative";
-  divInputPhoto.style.top = "126px";
-  divInputPhoto.style.left = "105px"; */
+  const photoInfo = document.createElement("p");
+  photoInfo.innerText = "jpg, png : 4mo max";
+  photoInfo.style.zIndex = "1";
+  photoInfo.style.position = "absolute";
+  photoInfo.style.top = "264px";
+  addModal.appendChild(photoInfo);
 
+  const photoInputDiv = document.createElement("div");
+  photoInputDiv.style.height = "169px";
+  photoInputDiv.style.width = "420px";
+  photoInputDiv.style.display = "flex";
+  photoInputDiv.style.justifyContent = "center";
+  photoInputDiv.style.position = "absolute";
+  photoInputDiv.style.top = "126px";
+  photoInputDiv.style.backgroundColor = "#E8F1F6";
+  photoInputDiv.style.zIndex = "0";
+  addModal.appendChild(photoInputDiv);
+  
 
-  inputPhoto.addEventListener("change", function () {
+  photoInput.addEventListener("change", function () {
     if (this.files && this.files[0]) {
       const reader = new FileReader();
-
       reader.onload = function (e) {
         const imgElement = document.createElement("img");
         imgElement.src = e.target.result;
         imgElement.style.maxWidth = "100%";
         imgElement.style.maxHeight = "100%";
-        divInputPhoto.innerHTML = "";
-        divInputPhoto.style.zIndex = "1000";
-        divInputPhoto.appendChild(imgElement);
-
+        photoInputDiv.innerHTML = "";
+        photoInputDiv.style.zIndex = "1000";
+        photoInputDiv.appendChild(imgElement);
       };
       reader.readAsDataURL(this.files[0]);
     }
   });
 
+  const titleInputLabel = document.createElement("label");
+  titleInputLabel.for = "inputTitre";
+  titleInputLabel.innerText = "Titre";
+  titleInputLabel.style.position = "absolute";
+  titleInputLabel.style.top = "325px";
+  addModalForm.appendChild(titleInputLabel);
 
-  modaleAjout.appendChild(divInputPhoto);
+  const titleInput = document.createElement("input");
+  titleInput.setAttribute("type", "text");
+  titleInput.id = "inputTitre";
+  titleInput.style.width = "420px";
+  titleInput.style.position = "absolute";
+  titleInput.style.top = "351px";
+  titleInput.style.height = "51px";
+  titleInput.style.boxSizing = "border-box";
+  titleInput.style.boxShadow = "0px 4px 14px 0px rgba(0, 0, 0, 0.09)";
+  titleInput.style.border = "none";
+  addModalForm.appendChild(titleInput);
 
+  const categoryInputLabel = document.createElement("label");
+  categoryInputLabel.for = "inputCategorie";
+  categoryInputLabel.innerText = "Catégorie";
+  categoryInputLabel.style.position = "absolute";
+  categoryInputLabel.style.top = "423px";
+  addModalForm.appendChild(categoryInputLabel);
 
+  const categoryInput = document.createElement("select");
+  categoryInput.id = "inputCategorie";
+  categoryInput.style.width = "420px";
+  categoryInput.style.position = "absolute";
+  categoryInput.style.top = "449px";
+  categoryInput.style.height = "51px";
+  categoryInput.style.boxShadow = "0px 4px 14px 0px rgba(0, 0, 0, 0.09)";
+  categoryInput.style.border = "none";
 
-  formModalAjout.appendChild(inputPhoto);
-  formModalAjout.appendChild(labelInputPhoto);
+  const categoryInputSelect = document.createElement("option");
+  categoryInputSelect.value = "";
+  categoryInputSelect.innerText = "Selectionner une catégorie";
+  categoryInput.appendChild(categoryInputSelect);
 
+  const categoryInput1 = document.createElement("option");
+  categoryInput1.value = "1";
+  categoryInput1.innerText = "Objets";
+  categoryInput.appendChild(categoryInput1);
 
-  const labelInputTitre = document.createElement("label");
-  labelInputTitre.for = "inputTitre";
-  labelInputTitre.innerText = "Titre";
-  labelInputTitre.style.position = "absolute";
-  labelInputTitre.style.top = "325px";
-  formModalAjout.appendChild(labelInputTitre);
+  const categoryInput2 = document.createElement("option");
+  categoryInput2.value = "2";
+  categoryInput2.innerText = "Appartements";
+  categoryInput.appendChild(categoryInput2);
 
-  const inputTitre = document.createElement("input");
-  inputTitre.setAttribute("type", "text");
-  inputTitre.id = "inputTitre";
-  inputTitre.style.width = "420px";
-  inputTitre.style.position = "absolute";
-  inputTitre.style.top = "351px";
-  inputTitre.style.height = "51px";
-  inputTitre.style.boxSizing = "border-box";
-  inputTitre.style.boxShadow = "0px 4px 14px 1.4px rgba(0, 0, 0, 0.09)";
-  inputTitre.style.border = "none";
-  /* inputTitre.style.position = "fixed";
-  inputTitre.style.top = "1011px";
-  inputTitre.style.left = "510px"; */
-  formModalAjout.appendChild(inputTitre);
+  const categoryInput3 = document.createElement("option");
+  categoryInput3.value = "3";
+  categoryInput3.innerText = "Hotels & Restaurants";
+  categoryInput.appendChild(categoryInput3);
+  addModalForm.appendChild(categoryInput);
 
+  const photoSubmitButton = document.createElement("button");
+  photoSubmitButton.type = "submit";
+  photoSubmitButton.innerText = "Valider";
+  photoSubmitButton.style.width = "237px";
+  photoSubmitButton.style.borderRadius = "60px";
+  photoSubmitButton.style.backgroundColor = "#A7A7A7";
+  photoSubmitButton.style.height = "36px";
+  photoSubmitButton.style.position = "absolute";
+  photoSubmitButton.style.top = "579px";      
+  photoSubmitButton.style.left = "0";
+  photoSubmitButton.style.right = "0";
+  photoSubmitButton.style.marginLeft = "auto";
+  photoSubmitButton.style.marginRight = "auto";
+  photoSubmitButton.style.border = "none";
+  photoSubmitButton.style.color = "#FFFFFF";
+  addModalForm.appendChild(photoSubmitButton);
 
+  const Arrowback = document.createElement("i");
+  Arrowback.classList.add("fas", "fa-arrow-left");
+  Arrowback.style.position = "absolute";
+  Arrowback.style.top = "26px";
+  Arrowback.style.left = "26px";
+  Arrowback.style.fontSize = "21px";
+  addModal.appendChild(Arrowback);
 
-  const labelInputCategorie = document.createElement("label");
-  labelInputCategorie.for = "inputCategorie";
-  labelInputCategorie.innerText = "Catégorie";
-  labelInputCategorie.style.position = "absolute";
-  labelInputCategorie.style.top = "423px";
-  formModalAjout.appendChild(labelInputCategorie);
+  
+  // Gestion de l'événement input pour les champs du formulaire
+  photoInput.addEventListener("input", checkFormFields);
+  titleInput.addEventListener("input", checkFormFields);
+  categoryInput.addEventListener("input", checkFormFields);
 
-  const inputCategorie = document.createElement("select");
-  inputCategorie.id = "inputCategorie";
-  inputCategorie.style.width = "420px";
-  inputCategorie.style.position = "absolute";
-  inputCategorie.style.top = "449px";
-  inputCategorie.style.height = "51px";
-  inputCategorie.style.boxShadow = "0px 4px 0px 1.4px rgba(0, 0, 0, 0.09)";
-  inputCategorie.style.border = "none";
-  /*inputCategorie.style.position = "fixed";
-  inputCategorie.style.top = "1109px";
-  inputCategorie.style.left = "510px"; */
-  const inputCategorieSelect = document.createElement("option");
-  inputCategorieSelect.value = "";
-  inputCategorieSelect.innerText = "Selectionner une catégorie";
-  inputCategorie.appendChild(inputCategorieSelect);
-  const inputCategorie1 = document.createElement("option");
-  inputCategorie1.value = "1";
-  inputCategorie1.innerText = "Objets";
-  inputCategorie.appendChild(inputCategorie1);
-  const inputCategorie2 = document.createElement("option");
-  inputCategorie2.value = "2";
-  inputCategorie2.innerText = "Appartements";
-  inputCategorie.appendChild(inputCategorie2);
-  const inputCategorie3 = document.createElement("option");
-  inputCategorie3.value = "3";
-  inputCategorie3.innerText = "Hotels & Restaurants";
-  inputCategorie.appendChild(inputCategorie3);
-  formModalAjout.appendChild(inputCategorie);
+  // gestion de l'événement submit
+  photoSubmitButton.addEventListener("click", gestionFormulaire);
 
-  const btnSubmitPhoto = document.createElement("button");
-  btnSubmitPhoto.type = "submit";
-  btnSubmitPhoto.innerText = "Valider";
-  btnSubmitPhoto.style.width = "237px";
-  btnSubmitPhoto.style.borderRadius = "60px";
-  btnSubmitPhoto.style.backgroundColor = "#A7A7A7";
-  btnSubmitPhoto.style.height = "36px";
-  btnSubmitPhoto.style.position = "absolute";
-  btnSubmitPhoto.style.top = "579px";      
-  btnSubmitPhoto.style.left = "0";
-  btnSubmitPhoto.style.right = "0";
-  btnSubmitPhoto.style.marginLeft = "auto";
-  btnSubmitPhoto.style.marginRight = "auto";
-  btnSubmitPhoto.style.border = "none";
-  formModalAjout.appendChild(btnSubmitPhoto);
-
+  // gestion de fermeture de la modale Ajout
+  closeAddModalButton.addEventListener("click", function () {
+    const fermeture = document.querySelector("aside");
+    fermeture.remove();
+  })
+  
+  // gestion de retour à la modale Galerie
+  Arrowback.addEventListener("click", function () {
+    const retour = document.querySelector("aside");
+    retour.remove();
+    openModales();
+  })
 
   async function uploadImage(formData) {
     const url = 'http://localhost:5678/api/works'; // Remplacez cela par l'URL de votre point d'API
     const options = {
       headers: {
-        'Authorization': `Bearer ${presenceToken}`
+        'Authorization': `Bearer ${Token}`
       },
       method: 'POST',
       body: formData
@@ -393,10 +404,10 @@ function genererModaleAjout() {
         
       })
       .then(data => {
-        console.log("Réponse du serveur :", data);
         const reinitForm = document.querySelector("aside");
         reinitForm.remove();
         genererModaleAjout();
+        fetchData();
       })
       .catch(error => {
         console.error("Erreur lors de l'envoi de la requête :", error);
@@ -404,148 +415,114 @@ function genererModaleAjout() {
   }
   async function gestionFormulaire(event) {
     event.preventDefault();
-    const inputPhotoValue = document.getElementById("inputPhoto");
-    const inputTitreValue = document.getElementById("inputTitre").value;
-    const inputCategorieValue = document.getElementById("inputCategorie").value;
-    if (inputPhoto !== null && inputTitreValue !== "" && inputCategorieValue !== ""){
-    console.log("inputPhotoValue =" + inputPhotoValue)
-    const file = inputPhotoValue.files[0];
-    console.log("file =" + file);
-    const formData = new FormData();
-
-    formData.append('image', inputPhoto.files[0]);
-    formData.append('title', inputTitreValue);
-    formData.append('category', inputCategorieValue);
-    try {
-      await uploadImage(formData);
-    } catch (error) {
-      console.error["erreur dans l'envoie upload"]
+    const photoInputValue = document.getElementById("inputPhoto");
+    const titleInputValue = document.getElementById("inputTitre").value;
+    const categoryInputValue = document.getElementById("inputCategorie").value;
+    if (photoInputValue !== null && titleInputValue !== "" && categoryInputValue !== ""){
+      const formData = new FormData();
+      formData.append('image', photoInput.files[0]);
+      formData.append('title', titleInputValue);
+      formData.append('category', categoryInputValue);
+      try {
+        await uploadImage(formData);
+      } catch (error) {
+        console.error["erreur dans l'envoie upload"]
+      }
+    }else { 
+      const formError = document.createElement("p");
+      formError.innerText = "Erreur : tous les champs du formulaire doivent être remplis"
+      formError.style.color = "red";
+      formError.style.position = "absolute";
+      formError.style.top = "559px";
+      addModalForm.insertBefore(formError, photoSubmitButton);
     }
-  }else { 
-    const erreurFormulaire = document.createElement("p");
-    erreurFormulaire.innerText = "Erreur : tous les champs du formulaire doivent être remplis"
-    erreurFormulaire.style.color = "red";
-    erreurFormulaire.style.position = "absolute";
-    erreurFormulaire.style.top = "559px";
-    formModalAjout.insertBefore(erreurFormulaire, btnSubmitPhoto);
-    console.log("tout les champs de formulaire doivent etre rempli");
   }
-  }
-  // Gestion de l'événement input pour les champs du formulaire
-  inputPhoto.addEventListener("input", checkFormFields);
-  inputTitre.addEventListener("input", checkFormFields);
-  inputCategorie.addEventListener("input", checkFormFields);
-  btnSubmitPhoto.addEventListener("click", gestionFormulaire);
+  
   // Fonction pour vérifier si tous les champs du formulaire sont remplis
   function checkFormFields() {
-    const inputPhotoValue = document.getElementById("inputPhoto").value;
-    const inputTitreValue = document.getElementById("inputTitre").value;
-    const inputCategorieValue = document.getElementById("inputCategorie").value;
+    const photoInputValue = document.getElementById("inputPhoto").value;
+    const titleInputValue = document.getElementById("inputTitre").value;
+    const categoryInputValue = document.getElementById("inputCategorie").value;
 
     // Vérifier si tous les champs du formulaire sont remplis
-    if (inputPhotoValue !== "" && inputTitreValue !== "" && inputCategorieValue !== "") {
-      btnSubmitPhoto.style.backgroundColor = "#1D6154"; // Changer la couleur du bouton
-
+    if (photoInputValue !== "" && titleInputValue !== "" && categoryInputValue !== "") {
+      photoSubmitButton.style.backgroundColor = "#1D6154";
     } else {
-      btnSubmitPhoto.style.backgroundColor = "A7A7A7"; // Réinitialiser la couleur du bouton
+      photoSubmitButton.style.backgroundColor = "A7A7A7"; 
     }
-
-
   }
-
-  btnFermetureModaleAjout.addEventListener("click", function () {
-    const fermeture = document.querySelector("aside");
-    fermeture.remove();
-  })
-  const Arrowback = document.createElement("i");
-  Arrowback.classList.add("fas", "fa-arrow-left");
-  Arrowback.style.position = "absolute";
-  Arrowback.style.top = "26px";
-  Arrowback.style.left = "26px";
-  Arrowback.style.fontSize = "21px";
-  modaleAjout.appendChild(Arrowback);
-  Arrowback.addEventListener("click", function () {
-    const retour = document.querySelector("aside");
-    retour.remove();
-    openModales();
-  })
 }
-function genererContennuModale(data) {
-  console.log("les data de ma modale sont:" + data);
-  for (let i = 0; i < data.length; i++) {
-    const article = data[i];
+function genererContennuModale(contenu) {
+  const resetModalContent = document.querySelector(".containerImgModale");
+      resetModalContent.innerHTML = '';
+  for (let i = 0; i < contenu.length; i++) {
+    const article = contenu[i];
+    const moadalContentSection = document.querySelector(".containerImgModale");
 
-    const sectionContenuModale = document.querySelector(".containerImgModale");
     // Création du conteneur pour l'image et le bouton
     const container = document.createElement("div");
     container.classList.add("imageContainer");
 
-
     // Création de l'élément image
-    const imageElement = document.createElement("img");
-    imageElement.src = article.imageUrl;
-    imageElement.style.height = "100%";
-    imageElement.classList.add("imageClass");
+    const elementImage = document.createElement("img");
+    elementImage.src = article.imageUrl;
+    elementImage.style.height = "100%";
+    elementImage.classList.add("imageClass");
 
     // Création du bouton
-    const btnIconPoubelle = document.createElement("button");
-    btnIconPoubelle.classList.add("iconButton");
-    btnIconPoubelle.getAttribute("dataImageId");
-    btnIconPoubelle.dataImageId = article.id;
-    btnIconPoubelle.style.backgroundColor = "black";
-    btnIconPoubelle.style.borderRadius = "2px";
-    btnIconPoubelle.style.border = "none";
-    btnIconPoubelle.style.height = "17px";
-    btnIconPoubelle.style.width = "17px";
-    btnIconPoubelle.style.display = "flex";
-    btnIconPoubelle.style.justifyContent = "center";
-    btnIconPoubelle.style.alignItems = "center";
-
-
-    const iconPoubelle = document.createElement("i");
-    iconPoubelle.style.color = "#FFFFFF"
-    iconPoubelle.style.fontSize = "10px"
-    iconPoubelle.classList.add("fas", "fa-trash-can");
-
-    btnIconPoubelle.style.position = "relative";
-    btnIconPoubelle.style.top = "-100px";
-    btnIconPoubelle.style.left = "54px";
-    btnIconPoubelle.appendChild(iconPoubelle);
-
+    const trashIconButton = document.createElement("button");
+    trashIconButton.classList.add("iconButton");
+    trashIconButton.getAttribute("dataImageId");
+    trashIconButton.dataImageId = article.id;
+    trashIconButton.style.backgroundColor = "black";
+    trashIconButton.style.borderRadius = "2px";
+    trashIconButton.style.border = "none";
+    trashIconButton.style.height = "17px";
+    trashIconButton.style.width = "17px";
+    trashIconButton.style.display = "flex";
+    trashIconButton.style.justifyContent = "center";
+    trashIconButton.style.alignItems = "center";
+    trashIconButton.style.position = "relative";
+    trashIconButton.style.top = "-100px";
+    trashIconButton.style.left = "54px";
+    
+    const trashIcon = document.createElement("i");
+    trashIcon.style.color = "#FFFFFF"
+    trashIcon.style.fontSize = "10px"
+    trashIcon.classList.add("fas", "fa-trash-can");
+    trashIconButton.appendChild(trashIcon);
+    
     // Ajout de l'image et du bouton au conteneur
-    container.appendChild(imageElement);
-    container.appendChild(btnIconPoubelle);
+    container.appendChild(elementImage);
+    container.appendChild(trashIconButton);
+
     // Ajout du conteneur au sectionContenuModale
-    sectionContenuModale.appendChild(container);
+    moadalContentSection.appendChild(container);
 
-    btnIconPoubelle.addEventListener("click", function () {
-      console.log("l'id du bouton clicker est : " + btnIconPoubelle.dataImageId);
-      // suppresion de l'élément sur la page 
-      // Fonction pour supprimer un élément par son ID et regenerer les élements sans rechargement
-      supprimerElementParId(btnIconPoubelle);
-
+    trashIconButton.addEventListener("click", function () {
+      
       // Suppresion de l'élément dans l'api
       const id = this.dataImageId;
       const url = `http://localhost:5678/api/works/${id}`;
-      console.log(url);
       const data = url;
 
       // Configuration de la requête
       const requestOptions = {
-        method: 'DELETE', // Méthode DELETE
+        method: 'DELETE', 
         headers: {
-          'Content-Type': 'application/json', // Type de contenu : JSON
-          'Authorization': `Bearer ${presenceToken}`
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${Token}`
         },
       };
 
       // Envoi de la requête
       fetch(url, requestOptions)
         .then(response => {
-          // Gestion de la réponse HTTP
-
-          if (response.status === 200) {
-            throw new Error('Item Deleted');
+          if (response.ok) {
+            fetchData()
+            .then (data => {
+              genererContennuModale(data);
+            });
           } else if (response.status === 401) {
             throw new Error('Vous n\'êtes pas autorisé à accéder à ces données.');
           } else if (response.status === 500) {
@@ -553,11 +530,6 @@ function genererContennuModale(data) {
           } else {
             throw new Error('Erreur de récupération des données : ' + response.status);
           }
-
-          // Récupérer et renvoyer les données JSON de la réponse
-
-        })
-        .then(data => {
         })
         .catch(error => {
           // Gestion des erreurs
@@ -568,160 +540,118 @@ function genererContennuModale(data) {
   }
 }
 
-// fonction de suppresion d'un element
-function supprimerElementParId(btnIconPoubelle) {
-  // Trouver l'index de l'élément avec l'ID donné
-  fetchData()
-    .then(data => {
-      const index = data.findIndex(element => element.id === btnIconPoubelle.dataImageId);
-      if (index !== -1) {
-        // Supprimer l'élément du tableau en utilisant l'index
-        data.splice(index, 1);
-        console.log(`L'élément avec l'ID ${btnIconPoubelle.dataImageId} a été supprimé.`);
-      } else {
-        console.log(`Aucun élément avec l'ID ${btnIconPoubelle.dataImageId} n'a été trouvé.`);
-      }
-      // Les données sont disponibles ici en dehors de la fonction fetch
-      console.log("la nouvelle valeur du tableau après suppression est  :", data);
-      // Vous pouvez appeler d'autres fonctions avec les données ici
-      // autreFonction(data);
-      const reinitialisationContenuModale = document.querySelector(".containerImgModale");
-      reinitialisationContenuModale.innerHTML = '';
 
-      const reinitialisationContenu = document.querySelector(".gallery");
-      reinitialisationContenu.innerHTML = '';
-      genererContenu(data);
-      genererContennuModale(data);
-    })
-}
-
-
-
-const sectionBtn = document.querySelector(".bouton");
-sectionBtn.style.display = "flex";
-sectionBtn.style.justifyContent = "center";
-sectionBtn.style.marginBottom = "50px";
-sectionBtn.style.paddingTop = "20px";
-
-
+const buttonSection = document.querySelector(".bouton");
+buttonSection.style.display = "flex";
+buttonSection.style.justifyContent = "center";
+buttonSection.style.marginBottom = "50px";
+buttonSection.style.paddingTop = "20px";
 
 const gallery = document.querySelector(".gallery");
 
-
-
-//async function affichagePage(){
-//const reponse = await fetch('http://localhost:5678/api/works');
-//  contenu = await reponse.json();
-//console.log(contenu);
-// genererContennu();
-// }
 let contenu = [];
+
 async function fetchData() {
   return await fetch('http://localhost:5678/api/works')
     .then(response => {
-      if (response === 500) {
+      if (response.status === 500) {
         throw new Error('unexpected error');
       }
       return response.json();
     })
     .then(data => {
       // Traite les données de réponse ici
-      console.log(data);
       genererContenu(data);
-      console.log("j'ai lieu deux fois");
       contenu = data;
-      return data;
+      return contenu;
     })
     .catch(error => {
       console.error('Erreur :', error);
     });
 }
+
 fetchData();
+
 function genererContenu(data) {
-  console.log("le tableau du contenu est =" + data);
-  const sectionGalerie = document.querySelector(".gallery");
-  sectionGalerie.innerHTML = '';
+  const galerySection = document.querySelector(".gallery");
+  galerySection.innerHTML = '';
 
   for (let i = 0; i < data.length; i++) {
     const article = data[i];
-    console.log("le contenu de article dans la boucle for est :" + article)
 
     // Création d’une balise dédiée à une pièce automobile
-    const elementGalerie = document.createElement("figure");
+    const galeryElement = document.createElement("figure");
     // Création des balises 
-    const imageElement = document.createElement("img");
-    imageElement.src = article.imageUrl;
-    const titreElement = document.createElement("figcaption");
-    titreElement.innerText = article.title;
-    console.log("titre de l'article" + i + titreElement.innerText);
-    // On rattache la balise article a la section Fiches
-    sectionGalerie.appendChild(elementGalerie);
-    // On rattache l’image à pieceElement (la balise article)
-    elementGalerie.appendChild(imageElement);
-    elementGalerie.appendChild(titreElement);
+    const elementImage = document.createElement("img");
+    elementImage.src = article.imageUrl;
 
+    const ElementTitle = document.createElement("figcaption");
+    ElementTitle.innerText = article.title;
+
+    galerySection.appendChild(galeryElement);
+    galeryElement.appendChild(elementImage);
+    galeryElement.appendChild(ElementTitle);
   }
 }
 
 // Fonction pour créer les boutons des catégories
 function createCategoryButtons(categoriesdata) {
-  const btnTous = document.createElement("button");
-  btnTous.classList.add("buttonStyle");
-  btnTous.innerText = "tous";
-  btnTous.style.border = "1px solid #1D6154";
-  btnTous.style.width = "100px";
-  btnTous.style.height = "37px";
-  btnTous.style.borderRadius = "60px"
-  btnTous.style.marginRight = "10px";
-  btnTous.classList.add("active");
-  btnTous.addEventListener("click", function(){
-    gallery.innerHTML = '';
-    genererContenu(contenu);
-    const boutons = document.querySelectorAll(".buttonStyle");
-    boutons.forEach(b => {
-      b.classList.remove('active');
+  if (Token){buttonSection.style.display = "none"} 
+  else {
+    const tousButton = document.createElement("button");
+    tousButton.classList.add("buttonStyle");
+    tousButton.innerText = "Tous";
+    tousButton.style.border = "1px solid #1D6154";
+    tousButton.style.width = "100px";
+    tousButton.style.height = "37px";
+    tousButton.style.borderRadius = "60px"
+    tousButton.style.marginRight = "10px";
+    tousButton.classList.add("active");
+    tousButton.addEventListener("click", function(){
+      gallery.innerHTML = '';
+      genererContenu(contenu);
+      const boutons = document.querySelectorAll(".buttonStyle");
+      boutons.forEach(b => {
+        b.classList.remove('active');
+      });
+      tousButton.classList.add("active");
     });
-    btnTous.classList.add("active");
-  });
-  sectionBtn.appendChild(btnTous);
-  const existingCategories = new Set(); // Utilisez un ensemble pour éviter les doublons
-  categoriesdata.forEach(element => {
-      // Vérifiez si la catégorie existe déjà dans l'ensemble des catégories existantes
-      if (!existingCategories.has(element.category.name)) {
-          const button = document.createElement("button");
-          button.textContent = element.category.name;
-          button.style.minWidth = "100px";
-          button.style.border = "1px solid #1D6154";
-          button.style.padding = "10px";
-          button.style.borderRadius = "60px"
-          button.style.marginRight = "10px";         
-          button.classList.add("buttonStyle");
-          button.addEventListener("click", () => {
-              const categorie = element.category.id;
-              console.log(`Images de la catégorie ${element.category.name}`);
-              const boutons = document.querySelectorAll(".buttonStyle");
-              boutons.forEach(b => {
-                b.classList.remove('active');
+    buttonSection.appendChild(tousButton);
+    const existingCategories = new Set(); // Utilisez un ensemble pour éviter les doublons
+    categoriesdata.forEach(element => {
+        // Vérifiez si la catégorie existe déjà dans l'ensemble des catégories existantes
+        if (!existingCategories.has(element.category.name)) {
+            const button = document.createElement("button");
+            button.textContent = element.category.name;
+            button.style.minWidth = "100px";
+            button.style.border = "1px solid #1D6154";
+            button.style.padding = "10px";
+            button.style.borderRadius = "60px"
+            button.style.marginRight = "10px";         
+            button.classList.add("buttonStyle");
+            button.addEventListener("click", () => {
+                const category = element.category.id;
+                const boutons = document.querySelectorAll(".buttonStyle");
+                boutons.forEach(b => {
+                  b.classList.remove('active');
+                });
+                button.classList.add("active");
+                trierElement(category, contenu);
             });
-              button.classList.add("active");
-              trierElement(categorie, contenu);
-          });
-          sectionBtn.appendChild(button);
+            buttonSection.appendChild(button);
 
-          // Ajoutez la catégorie à l'ensemble des catégories existantes
-          existingCategories.add(element.category.name);
-      }
-  });
+            // Ajoutez la catégorie à l'ensemble des catégories existantes
+            existingCategories.add(element.category.name);
+        }
+    });
+  }
 }
 
-// Fonction pour initialiser l'application
+// Fonction pour initialiser la création des boutons
 async function init() {
   try {
-      const categoriesData = await fetchData(); // Attendre la résolution du fetch
-      categoriesData.forEach(obj => {
-        console.log(obj);
-      });
-      createCategoryButtons(categoriesData); // Créer les boutons une fois les données récupérées
+      const categoryData = await fetchData(); // Attendre la résolution du fetch
+      createCategoryButtons(categoryData); // Créer les boutons une fois les données récupérées
   } catch (error) {
       console.error("Erreur lors de la récupération des données des catégories :", error);
   }
@@ -730,26 +660,29 @@ async function init() {
 // Appel de la fonction d'initialisation
 init();
 
-//
-function trierElement(categorie, contenu) { // changer nom variable contenu + trier element 
+
+function trierElement(category, contenu) { 
   gallery.innerHTML = '';
-  console.log("contenu est " + contenu);
-  const contenuFiltre = contenu.filter(element => element.categoryId === categorie);
-  console.log(categorie);
-  console.log(contenuFiltre);
-  console.log("hello");
-  genererContenu(contenuFiltre);
+  const filterContent = contenu.filter(element => element.categoryId === category);
+  genererContenu(filterContent);
 };
 
+const btnProjet = Array.from(document.querySelectorAll('li')).find(li => li.textContent.trim() === "projets");
+btnProjet.addEventListener("click", function() {
+  location.reload();
+});
 
-const btnLogin = document.getElementById("login")
-btnLogin.style.backgroundColor = "#FFFFFF";
-btnLogin.style.border = "none";
-btnLogin.addEventListener("click", function () {
-  const pageConnexion = document.querySelector('main');
-  pageConnexion.innerHTML = '';
-  const htmlConnexion = '<div id="main-login"><h2>Log in</h2><form id="form-login"><div class="inputContainer"><label for="email">Email</label><input id="email" type="text"></div><div class="inputContainer"><label for="motDePasse">Mot de passe</label><input id="motDePasse" type="password"></div><div class="erreurMessage"></div><button type="submit" id="btnForm">Se connecter</button></form><a href="#">Mot de passe oublié</a></div>';
-  pageConnexion.innerHTML = htmlConnexion;
+const loginButton = Array.from(document.querySelectorAll('li')).find(li => {
+  const text = li.textContent.trim();
+  return text === "login" || text === "logout";
+});
+
+loginButton.addEventListener("click", function () {
+  loginButton.style.fontWeight = "600";
+  const login = document.querySelector('main');
+  login.innerHTML = '';
+  const htmlLogin = '<div id="main-login"><h2>Log in</h2><form id="form-login"><div class="inputContainer"><label for="email">Email</label><input id="email" type="text"></div><div class="inputContainer"><label for="motDePasse">Mot de passe</label><input id="motDePasse" type="password"></div><div class="erreurMessage"></div><button type="submit" id="btnForm">Se connecter</button></form><a href="#" class="passwordForget">Mot de passe oublié</a></div>';
+  login.innerHTML = htmlLogin;
 
   const footer = document.querySelector("footer");
   if (footer) {
@@ -795,53 +728,52 @@ btnLogin.addEventListener("click", function () {
     inputEmail.style.marginBottom = "30px";
   }
 
-  const inputMotDePasse = document.getElementById("motDePasse");
-  if (inputMotDePasse) {
-    inputMotDePasse.style.width = "379px";
-    inputMotDePasse.style.boxSizing = "border-box";
-    inputMotDePasse.style.marginTop = "6px";
+  const passwordInput = document.getElementById("motDePasse");
+  if (passwordInput) {
+    passwordInput.style.width = "379px";
+    passwordInput.style.boxSizing = "border-box";
+    passwordInput.style.marginTop = "6px";
   }
 
-  const btnForm = document.getElementById("btnForm");
-  if (btnForm) {
-    btnForm.style.width = "179px";
-    btnForm.style.marginTop = "37px";
-    btnForm.style.height = "36px"
-    btnForm.style.borderRadius = "60px";
-    btnForm.style.backgroundColor = "#1D6154";
-    btnForm.style.border = "none";
+  const passwordForget = document.querySelector(".passwordForget");
+  if (passwordForget) {
+    passwordForget.style.color = "black";
+    passwordForget.style.marginTop = "30px";
+    passwordForget.style.fontSize = "14px";
+    passwordForget.style.fontWeight = "500";
   }
 
-  btnForm.addEventListener("click", function (event) {
+  const submitFormButton = document.getElementById("btnForm");
+  if (submitFormButton) {
+    submitFormButton.style.width = "179px";
+    submitFormButton.style.marginTop = "37px";
+    submitFormButton.style.height = "36px"
+    submitFormButton.style.borderRadius = "60px";
+    submitFormButton.style.backgroundColor = "#1D6154";
+    submitFormButton.style.border = "none";
+    submitFormButton.style.color = "#FFFFFF";
+  }
+
+  submitFormButton.addEventListener("click", function (event) {
     event.preventDefault();
-    console.log("hello");
     const emailInput = document.getElementById("email");
     const emailValue = emailInput.value;
-    console.log("La valeur de l'adresse e-mail est : " + emailValue);
-
-    const mdPInput = document.getElementById("motDePasse");
-    // Pour récupérer la valeur de l'input text
-    const mdpValue = mdPInput.value;
-    // Utilisez ensuite la variable emailValue comme bon vous semble
-    console.log("La valeur du mot de passe est : " + mdpValue);
-
-    if (emailValue !== null && mdpValue !== null) {
-      // URL de destination
+    const passwordInput = document.getElementById("motDePasse");
+    const passwordValue = passwordInput.value;
+    if (emailValue !== null && passwordValue !== null) {
       const url = 'http://localhost:5678/api/users/login';
-
-      // Données à envoyer dans le corps de la requête (sous forme de chaîne JSON)
       const data = {
         email: emailValue,
-        password: mdpValue
+        password: passwordValue
       };
 
       // Configuration de la requête
       const requestOptions = {
-        method: 'POST', // Méthode POST
+        method: 'POST', 
         headers: {
-          'Content-Type': 'application/json' // Type de contenu : JSON
+          'Content-Type': 'application/json' 
         },
-        body: JSON.stringify(data) // Corps de la requête : données converties en JSON
+        body: JSON.stringify(data)
       };
 
       // Envoi de la requête
@@ -853,7 +785,7 @@ btnLogin.addEventListener("click", function () {
             throw new Error('Les données demandées n\'ont pas été trouvées.');
           } else if (response.status === 401) {
             throw new Error('Vous n\'êtes pas autorisé à accéder à ces données.');
-          } else if (response.status === 200) {
+          } else if (response.ok) {
             return response.json();
           } else {
             throw new Error('Erreur de récupération des données : ' + response.status);
@@ -866,21 +798,16 @@ btnLogin.addEventListener("click", function () {
           const ident = data;
           const token = ident.token;
           const userId = ident.userId;
-          console.log("userId est =" + userId);
           sessionStorage.setItem('userId', userId);
-          console.log("le token est : " + token);
           sessionStorage.setItem('token', token);
-          const tokenFromSessionStorage = sessionStorage.getItem('token');
-          console.log("La valeur de 'token' dans sessionStorage est : " + tokenFromSessionStorage);
-          // Utilisation des données de réponse
           window.location.reload();
         })
         .catch(error => {
-          const ErreurMessageTexte = "<p>Erreur dans l'identifiant ou le mot de passe</p>";
-          const ErreurMessage = document.querySelector(".erreurMessage");
-          ErreurMessage.style.color = "red";
-          ErreurMessage.style.margin = "10px";
-          ErreurMessage.innerHTML = ErreurMessageTexte;
+          const messageTextError = "<p>Erreur dans l'identifiant ou le mot de passe</p>";
+          const messageError = document.querySelector(".erreurMessage");
+          messageError.style.color = "red";
+          messageError.style.margin = "10px";
+          messageError.innerHTML = messageTextError;
           // Gestion des erreurs
           console.error('Erreur lors de la requête :', error);
         });
